@@ -1,48 +1,33 @@
 <template>
-  <v-layout row>
+  <v-layout colomn>
     <v-flex xs6 offset-xs3>
-      <div class="white elevation-2">
-        <v-toolbar flat dark class="cyan">
-          <v-toolbar-title>Login</v-toolbar-title>
-        </v-toolbar>
+      <panel title="Login">
+        <v-text-field
+          id="email"
+          name="email"
+          label="email"
+          v-model="email"
+        ></v-text-field>
 
-        <div class="pl-4 pr-4 pt-2 pb-2">
-          <!-- <input type="email"
-            name="email"
-            v-model="email"
-            placeholder="email" > -->
-          <v-text-field
-            id="email"
-            name="email"
-            label="email"
-            v-model="email"
-          ></v-text-field>
-
-          <br>
-          <!-- <input type="password"
-            name="password"
-            v-model="password"
-            placeholder="password" > -->
-
-          <v-text-field
-            id="password"
-            name="password"
-            label="password"
-            type="password"
-            v-model="password"
-          ></v-text-field>
-          <br>
-          <div class="error">{{error}}</div>
-          <v-btn class="cyan" dark @click="login">Login</v-btn>
-        </div>
-      </div>
+        <br>
+        <v-text-field
+          id="password"
+          name="password"
+          label="password"
+          type="password"
+          v-model="password"
+        ></v-text-field>
+        <br>
+        <div class="error">{{error}}</div>
+        <v-btn class="cyan" dark @click="login">Login</v-btn>
+      </panel>
     </v-flex>
-
   </v-layout>
 </template>
 
 <script>
 import AuthService from '@/services/AuthService'
+import Panel from '@/components/Panel'
 
 export default {
   data () {
@@ -56,14 +41,19 @@ export default {
     async login () {
       this.error = null
       try {
-        await AuthService.login({
+        const res = await AuthService.login({
           email: this.email,
           password: this.password
         })
+        this.$store.dispatch('setToken', res.data.token)
+        this.$store.dispatch('setUser', res.data.user)
       } catch (error) {
         this.error = error.response.data.error
       }
     }
+  },
+  components: {
+    Panel
   }
 }
 </script>
