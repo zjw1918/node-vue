@@ -9,7 +9,27 @@
         </v-btn>
 
         <div v-for="song in songs" :key="song.id">
-          <div><img :src="song.albumImageUrl" width="40px" alt="" srcset=""> - {{ song.title }} - {{ song.album }}</div>
+          <v-layout>
+            <v-flex xs6>
+              <div class="song-title">{{song.title}}</div>
+              <div class="song-artist">{{song.artist}}</div>
+              <div class="song-genre">{{song.genre}}</div>
+              <v-btn class="cyan" dark
+                @click="navigateTo({
+                  name: 'song',
+                  params: {
+                    songId: song.id
+                  }
+                })">View
+              </v-btn>
+            </v-flex>
+
+            <v-flex xs6>
+              <img class="song-album-image" :src="song.albumImageUrl" alt="">
+            </v-flex>
+          </v-layout>
+
+          <!-- <div><img :src="song.albumImageUrl" width="40px" alt="" srcset=""> - {{ song.title }} - {{ song.album }}</div> -->
         </div>
       </panel>
     </v-flex>
@@ -42,5 +62,17 @@ export default {
 </script>
 
 <style scoped>
-
+.song-title {
+  font-size: 22px;
+}
+.song-artist {
+  font-size: 20px;
+}
+.song-genre {
+  font-size: 18px;
+}
+.song-album-image {
+  width: 70%;
+  margin: 0 auto;
+}
 </style>
