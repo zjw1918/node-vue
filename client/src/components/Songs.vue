@@ -28,8 +28,6 @@
               <img class="song-album-image" :src="song.albumImageUrl" alt="">
             </v-flex>
           </v-layout>
-
-          <!-- <div><img :src="song.albumImageUrl" width="40px" alt="" srcset=""> - {{ song.title }} - {{ song.album }}</div> -->
         </div>
       </panel>
     </v-flex>
