@@ -28,7 +28,6 @@
 
 <script>
 import AuthService from '@/services/AuthService'
-import Panel from '@/components/Panel'
 
 export default {
   data () {
@@ -52,9 +51,6 @@ export default {
         this.error = error.response.data.error
       }
     }
-  },
-  components: {
-    Panel
   }
 }
 </script>

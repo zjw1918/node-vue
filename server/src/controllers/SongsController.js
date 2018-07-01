@@ -3,10 +3,22 @@ const { Song } = require('../models')
 module.exports = {
   async index (req, res) {
     try {
-      const song = await Song.findAll({
-        limit: 10
-      })
-      res.send(song)
+      let songs = null
+      const search = req.query.search
+      if (search) {
+        songs = await Song.findAll({
+          where: {
+            $or: ['title', 'artist', 'genre', 'album'].map(key => ({
+              [key]: {$like: `%${search}%`}
+            }))
+          }
+        })
+      } else {
+        songs = await Song.findAll({
+          limit: 10
+        })
+      }
+      res.send(songs)
     } catch (err) {
       res.status(500).send({
         error: 'An error occured when trying to get songs'
@@ -19,7 +31,7 @@ module.exports = {
       res.send(song)
     } catch (err) {
       res.status(500).send({
-        error: 'An error occured when trying to get a song'
+        error: 'An error occured when trying to show a song'
       })
     }
   },
@@ -30,6 +42,20 @@ module.exports = {
     } catch (err) {
       res.status(500).send({
         error: 'An error occured when trying to create a song'
+      })
+    }
+  },
+  async put (req, res) {
+    try {
+      await Song.update(req.body, {
+        where: {
+          id: req.params.songId
+        }
+      })
+      res.send(req.body)
+    } catch (err) {
+      res.status(500).send({
+        error: 'An error occured when trying to update a song'
       })
     }
   }

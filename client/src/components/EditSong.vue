@@ -18,7 +18,7 @@
       </panel>
 
       <div class="danger-alert">{{error}}</div>
-      <v-btn @click="create" class="cyan" dark>Create Song</v-btn>
+      <v-btn @click="save" class="cyan" dark>Save Song</v-btn>
     </v-flex>
   </v-layout>
 </template>
@@ -46,7 +46,7 @@ export default {
     }
   },
   methods: {
-    async create () {
+    async save () {
       const isAllFieldRequired = Object.keys(this.song)
         .every(i => !!this.song[i])
       if (!isAllFieldRequired) {
@@ -54,15 +54,27 @@ export default {
         return
       }
 
+      const songId = this.$store.state.route.params.songId
       try {
         this.error = null
-        await SongsService.post(this.song)
+        await SongsService.put(this.song)
         this.$router.push({
-          name: 'songs'
+          name: 'song',
+          params: {
+            songId: songId
+          }
         })
       } catch (err) {
         console.error(err)
       }
+    }
+  },
+  async mounted () {
+    try {
+      const songId = this.$store.state.route.params.songId
+      this.song = (await SongsService.show(songId)).data
+    } catch (err) {
+      console.error(err)
     }
   }
 }
